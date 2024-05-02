@@ -1,0 +1,47 @@
+body{
+    background-color: #212121;
+}
+
+.loginPageContainer{
+    background-image: url('Login\ Page\ Background.jpg');
+    max-width: 100%;
+    background-size: cover;
+    height:580px;
+}
+
+.signupPageContainer{
+    background-image: url('Signup\ Page\ Background.jpg');
+    max-width: 100%;
+    background-size: cover;
+    height:650px;
+}
+.homepageContainer{
+    background-image: url('Homepage\ Background.jpg');
+    max-width: 100%;
+    background-size: cover;
+    height:650px;
+}
+
+#moodSelector{
+    width:130px;
+}
+
+#happyDiv{
+    display:none;
+}
+
+#otherMoodDiv{
+    display:none;
+}
+
+#recipientMood{
+    width:130px;
+}
+
+.noMoodAlert{
+    max-width: 900px;
+}
+
+footer{
+    bottom: 0;
+}

@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block main %}
+
+    <div class="container signupPageContainer">
+        <div class="row mb-0">
+            <div class="col-lg-10 col-sm-10 col-xs-10 mx-auto mt-3">
+                <figure class="quoteBox bg-white text-start text-dark border border-3 rounded-4 p-3 mx-3 mb-0">
+                    <blockquote class="blockquote">
+                      <p>"Life doesn’t make any sense without interdependence. We need each other, and the sooner we learn that, the better for us all."</p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                      Erik Erikson
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 col-sm-8 col-xs-8 mx-auto">
+                <div class="signupHeadingContainer bg-white border rounded-4 mt-3 mx-4">
+                    <div class="headingTitle text-center px-4 py-2">
+                        <p class="m-0">Join us on our mission of getting together and helping one another through tough times.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="registerBox bg-white col-xl-3 col-lg-4 col-sm-6 text-center border border-2 rounded-4 mx-auto mt-4 py-3">
+                <div class='signupInputContainer mx-4 p-2 py-3'>
+                    <form action="/signup" method="post">
+                        <h3 class="text-dark"><u>Sign Up</u></h3>
+                        {% with message = get_flashed_messages() %}
+                            {% if message %}
+                                <div class="alert alert-warning mb-0" role="alert">
+                                    {{ message[0] }}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                        <div class="py-3 inputBoxes">
+                            <input required class="form-control mx-auto signupInputs" type="text" placeholder="Name" name="name" id="name">
+                        </div>
+                        <div class="pb-3 inputBoxes">
+                            <input required class="form-control mx-auto signupInputs" type="text" placeholder="Username" name="username" id="username">
+                        </div>
+                        <div class="inputBoxes mb-3">
+                            <input required class="form-control mx-auto signupInputs" type="password" placeholder="Password" name="password" id="password">
+                        </div>
+                        <div class="inputBoxes">
+                            <input required class="form-control mx-auto signupInputs" type="password" placeholder="Confirm Password" name="confirmation" id="confirmation"> 
+                        </div>
+                        <div class="text-end mt-3">
+                            <button class="btn text-dark border" type="submit" id="submitBtn">Sign Up</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

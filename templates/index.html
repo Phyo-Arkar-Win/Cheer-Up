@@ -1,0 +1,173 @@
+{% extends 'layout.html' %}
+
+{% block title %}Cheer Up!{% endblock %}
+
+{% block main %}
+    <div class="container homepageContainer">
+        
+        <!-- For Reports -->
+        {% if reportSuccess %}
+            <div class="container text-center text-white container">
+                <h1>
+                    Thank you, {{ user[0]['name'] }}.
+                </h1>
+                <h3 class="my-4">
+                    Your report has successfully been uploaded for review. 
+                </h3>
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-light" href="/" role="button">Back to Home</a>
+                </div>
+            </div>
+
+        {% elif outOfMessages %}
+        <div class="container text-center text-white container">
+            <h1>
+                Sorry, {{ user[0]['name'] }} :(
+            </h1>
+            <h3 class="my-4">
+                We are currently out of messages for the mood you selected. Sorry for the inconvenience.  
+            </h3>
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-light" href="/" role="button">Back to Home</a>
+            </div>
+        </div>
+
+        <!-- For Welcoming -->
+        {% elif not userMood %}
+            <h1 class="text-center text-white pt-3">
+                {% if user %}
+                    Hello, {{ user[0]['name'] }}!
+                {% endif %}
+            </h1>
+            <form action="/" method="post">
+                <div class="text-center text-white mt-3">
+                    <h2 class="d-inline mb-2">How are you feeling? </h2>
+                    <select class="form-select d-inline mb-1" id="moodSelector" name="moodSelector" aria-label="Default select example">
+                        <option disabled selected>Select</option>
+                        <option value="happy">Happy</option>
+                        <option value="sad">Sad</option>
+                        <option value="lonely">Lonely</option>
+                        <option value="depressed">Depressed</option>
+                    </select>
+                    <button onclick="renderOnMood()" type="button" class="btn btn-light mb-1 d-inline" id="goButton">Go</button>
+                    {% if happyError %}
+                        <div class="alert alert-warning happyAlert container" role="alert">
+                            Please type what you want to say in a textbox and choose a mood in a dropdown-button beside the submit button before submitting.
+                        </div>
+                    {% endif %}
+
+
+                    <script>
+                        function renderOnMood(){
+                            // Clear Textbox and selector from Happy Mood if there were any
+                            document.querySelector('#happyInput').value = '';
+                            document.querySelector('#recipientMood').selectedIndex = 0; 
+
+                            let happyDiv = document.querySelector('#happyDiv');
+                            let otherMoodDiv = document.querySelector('#otherMoodDiv');
+                            happyDiv.style.display = 'none';
+                            otherMoodDiv.style.display = 'none';
+
+                            let mood = document.querySelector('#moodSelector').value;
+                            if (mood === 'happy'){
+                                happyDiv.style.display = 'block';
+                            }
+                            else if(mood === 'sad' || mood === 'lonely' || mood === 'depressed'){
+                                otherMoodDiv.style.display = 'block';
+                                document.querySelector('.happyAlert').style.display = 'none';
+                            }
+                        }
+                    </script>
+                </div>
+                    
+                <div class="homepageMidContainer container mt-3">
+                    <div id="happyDiv">
+                        <label for="happyInput" class="form-label text-white">Care to cheer someone up?</label>
+                        <textarea class="form-control" id="happyInput" name='happyInput' rows="3"></textarea>
+                        
+                        <div class="d-flex justify-content-end mt-2">
+                            <h5 class="text-white mt-1 me-2">People with what mood do you wish to cheer up?</h5>
+                            <select class="form-select d-inline me-2" id="recipientMood" name="recipientMood" aria-label="Default select example">
+                                <option disabled selected>Mood</option>
+                                <option value="sad">Sad</option>
+                                <option value="lonely">Lonely</option>
+                                <option value="depressed">Depressed</option>
+                            </select>
+                            <input class="btn btn-light" type="submit" name='action' value="Submit">
+                        </div>
+                    </div>
+                    
+                    <div id="otherMoodDiv" class="mt-3 text-center">
+                        <h4 class="text-white">Click the button below to see what others are saying to cheer you up.</h4>
+                        <input class="btn btn-light" type="submit" name="action" value="Cheer me up!">
+                    </div>
+                </div>
+            </form>
+
+        <!-- For other mood outputs -->
+        {% elif userMood == 'sad' or userMood == 'lonely' or userMood == 'depressed'%}
+            <div class="outputContainer container">
+                <h1 class="text-center text-white pt-3">
+                    Cheer Up, {{ user[0]['name'] }}!
+                </h1>
+
+                <div>
+                    {% if output %}
+                    <h4 class="text-white">{{ sender['name'] }}({{ sender['username'] }}) said:</h3>
+                        <div class="bg-white text-dark border border-3 p-4 rounded-4">
+                            <h3>{{ output }}</h3>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2 p-0">
+                            <div>
+                                <form action="/" method="post">
+                                    <input type="hidden" name="reportedUser" value="{{ sender['username'] }}">
+                                    <input type="hidden" name="reportedMessage" value="{{ output }}">
+                                    <input type="submit" class="btn btn-primary" name='action' value="Report">
+                                </form>
+                            </div>
+                            <div>
+                                <a class="btn btn-light" href="/" role="button">Back to Home</a>
+                            </div>
+                        </div>
+                        {% if askForInput %}
+                            <div id="happyDiv" style="display:block">
+                                <h3 class="text-center text-white mt-4 mb-2">You have used 5 Cheer Ups! Would you like to cheer someone else too?</h3>
+                                <form action="/" method="post">
+                                    <label for="happyInput" class="form-label text-white">Care to cheer someone up?</label>
+                                    <textarea class="form-control" id="happyInput" name='happyInput' rows="3"></textarea>
+                                    
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <h5 class="text-white mt-1 me-2">In what mood of people do you want to cheer up?</h5>
+                                        <select class="form-select d-inline me-2" id="recipientMood" name="recipientMood" aria-label="Default select example">
+                                            <option disabled selected>Mood</option>
+                                            <option value="sad">Sad</option>
+                                            <option value="lonely">Lonely</option>
+                                            <option value="depressed">Depressed</option>
+                                        </select>
+                                        <input type="hidden" name="moodSelector" value="happy">
+                                        <input class="btn btn-light" type="submit" name='action' value="Submit">
+                                    </div>
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+        <!-- For users who cheered others up -->
+        {% elif inputSuccess %}
+            <div class="container text-center text-white container">
+                <h1>
+                    Thank you, {{ user[0]['name'] }}.
+                </h1>
+                <h3>
+                    You just brightened someone's day!
+                </h3>
+                <img src="/static/Thank you.jpg" class='img-fluid my-2' width="550px">
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-light" href="/" role="button">Back to Home</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
